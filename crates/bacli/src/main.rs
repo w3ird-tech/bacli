@@ -1,14 +1,10 @@
 use clap::Parser;
 
-use crate::info::get_info;
+use crate::commands::*;
 use crate::models::{Cli, Command};
-use crate::restart::restart;
-use crate::update_settings::update_settings;
 
-mod info;
+mod commands;
 mod models;
-mod restart;
-mod update_settings;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
