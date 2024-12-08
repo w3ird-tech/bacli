@@ -10,7 +10,7 @@ version = "0.1.0"
 
 [dependencies]
 anyhow = "1.0.94"
-bitaxe_api = { path = "../bitaxe_api", features = ["clap"] }
+bitaxe_api = { version = "0.1.0", path = "../bitaxe_api", features = ["clap"] }
 clap = { version = "4.5.22", features = ["derive"] }
 env_logger = "0.11.5"
 humantime = "2.1.0"
