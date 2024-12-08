@@ -1,0 +1,24 @@
+[package]
+authors = ["w3irdrobot <dro@w3ird.tech>"]
+description = "Crate for interacting with the Bitaxe API."
+edition = "2021"
+homepage = "https://github.com/w3ird-tech/bacli"
+license = "	AGPL-3.0-only"
+name = "bitaxe_api"
+repository = "https://github.com/w3ird-tech/bacli"
+version = "0.1.0"
+
+[dependencies]
+clap = { version = "4.5.23", optional = true }
+log = "0.4.22"
+reqwest = { version = "0.12.9", features = ["json"] }
+serde = { version = "1.0.215", features = ["derive"] }
+serde_repr = "0.1.19"
+serde_with = "3.11.0"
+thiserror = "2.0.4"
+
+[features]
+clap = ["dep:clap"]
+
+[dev-dependencies]
+serde_json = "1.0.133"
