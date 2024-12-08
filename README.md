@@ -5,7 +5,7 @@ device in an easy to use way.
 
 ## Quickstart
 
-Download the latest release from [GitHub Releases](https://github.com/w3irdrobot/ds4432/releases).
+Download the latest release from [GitHub Releases](https://github.com/w3ird-tech/bacli/releases).
 
 ## Development
 
