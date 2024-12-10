@@ -18,9 +18,9 @@ async fn main() -> anyhow::Result<()> {
     }?;
 
     match cli.command {
-        Command::Info(args) => get_info(args).await?,
-        Command::Restart(args) => restart(args).await?,
-        Command::UpdateSettings(args) => update_settings(args).await?,
+        Command::Info(args) => get_info(cfg, args).await?,
+        Command::Restart(args) => restart(cfg, args).await?,
+        Command::UpdateSettings(args) => update_settings(cfg, args).await?,
         Command::List => list(cfg).await?,
         Command::Alias(args) => alias(cfg, args).await?,
     }

@@ -56,6 +56,10 @@ impl Config {
         &self.inner.devices
     }
 
+    pub fn get_device(&self, ident: &str) -> Option<&Device> {
+        self.inner.devices.iter().find(|d| d.matches_ident(ident))
+    }
+
     pub fn get_device_mut(&mut self, ident: &str) -> Option<&mut Device> {
         self.inner
             .devices
