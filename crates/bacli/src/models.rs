@@ -1,7 +1,7 @@
 use bitaxe_api::models::Settings;
 use clap::{Args, Parser, Subcommand};
 use serde::{Deserialize, Serialize};
-use std::net::IpAddr;
+use serde_with::{serde_as, skip_serializing_none};
 
 /// Bitaxe CLI is a wrapper around the Bitaxe API, enabling the management of a Bitaxe device
 /// in an easy to use way.
@@ -24,6 +24,8 @@ pub enum Command {
     UpdateSettings(UpdateSetttingsArgs),
     /// List known Bitaxe devices from the config
     List,
+    /// Associate an alias with a base (IP)
+    Alias(AliasArgs),
 }
 
 #[derive(Debug, Clone, Args)]
@@ -49,8 +51,24 @@ pub struct UpdateSetttingsArgs {
     pub settings: Settings,
 }
 
+#[derive(Debug, Clone, Args)]
+pub struct AliasArgs {
+    /// The URL of the device on the local network. This will usually be an IP address.
+    pub base: String,
+    /// The alias to reference the IP
+    pub alias: String,
+}
+
+#[serde_as]
+#[skip_serializing_none]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DeviceConfig {
-    pub ip: IpAddr,
+pub struct Device {
+    pub base: String,
     pub alias: Option<String>,
+}
+
+impl Device {
+    pub fn matches_ident(&self, ident: &str) -> bool {
+        self.base == ident || self.alias.as_ref().is_some_and(|a| a == ident)
+    }
 }

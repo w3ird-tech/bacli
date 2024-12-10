@@ -1,15 +1,16 @@
 use anyhow::Result;
 use comfy_table::Table;
 
-use crate::models::DeviceConfig;
+use crate::config::Config;
 
-pub async fn list(devices: Vec<DeviceConfig>) -> Result<()> {
-    if devices.is_empty() {
+pub async fn list(config: Config) -> Result<()> {
+    if config.is_empty() {
         println!("No devices currently configured.");
     } else {
-        let rows = devices
-            .into_iter()
-            .map(|d| vec![d.ip.to_string(), d.alias.unwrap_or_default()]);
+        let rows = config
+            .get_devices()
+            .iter()
+            .map(|d| vec![d.base.to_string(), d.alias.clone().unwrap_or_default()]);
 
         let mut table = Table::new();
         table.set_header(vec!["IP", "Alias"]).add_rows(rows);
