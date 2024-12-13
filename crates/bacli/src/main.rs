@@ -23,6 +23,7 @@ async fn main() -> anyhow::Result<()> {
         Command::UpdateSettings(args) => update_settings(cfg, args).await?,
         Command::List => list(cfg).await?,
         Command::Alias(args) => alias(cfg, args).await?,
+        Command::Scan(args) => scan(cfg, args).await?,
     }
 
     Ok(())

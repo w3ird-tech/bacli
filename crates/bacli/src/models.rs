@@ -1,3 +1,5 @@
+use std::net::IpAddr;
+
 use bitaxe_api::models::Settings;
 use clap::{Args, Parser, Subcommand};
 use serde::{Deserialize, Serialize};
@@ -26,6 +28,8 @@ pub enum Command {
     List,
     /// Associate an alias with a base (IP)
     Alias(AliasArgs),
+    /// Scan the local network for devices
+    Scan(ScanArgs),
 }
 
 #[derive(Debug, Clone, Args)]
@@ -55,8 +59,21 @@ pub struct UpdateSetttingsArgs {
 pub struct AliasArgs {
     /// The URL of the device on the local network. This will usually be an IP address.
     pub base: String,
-    /// The alias to reference the IP
+    /// The alias to reference the IP.
     pub alias: String,
+}
+
+#[derive(Debug, Clone, Args)]
+pub struct ScanArgs {
+    /// An IP address in the IP range of the network containing the devices.
+    #[arg(long, default_value = "192.168.1.1")]
+    pub base: IpAddr,
+    /// A mask to apply to the base IP to get the range of available IPs.
+    #[arg(long, default_value = "255.255.255.0")]
+    pub mask: IpAddr,
+    /// Save any new found devices to the config.
+    #[arg(short, long = "save")]
+    pub should_save: bool,
 }
 
 #[serde_as]
