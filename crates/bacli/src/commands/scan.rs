@@ -51,7 +51,7 @@ pub async fn scan(mut config: Config, args: ScanArgs) -> Result<()> {
 }
 
 async fn check_ip(pool: reqwest::Client, ip: IpAddr) -> Result<(IpAddr, SystemInfo)> {
-    let client = BitaxeClient::new_with_client(pool, &ip);
+    let client = BitaxeClient::new_with_client(pool, ip);
     let info = client.system_info().await?;
 
     Ok((ip, info))
