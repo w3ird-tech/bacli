@@ -6,7 +6,7 @@ homepage = "https://github.com/w3ird-tech/bacli"
 license = "	AGPL-3.0-only"
 name = "bacli"
 repository = "https://github.com/w3ird-tech/bacli"
-version = "0.1.0"
+version = "0.2.0"
 
 [dependencies]
 anyhow = "1.0.94"
