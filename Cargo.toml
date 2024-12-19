@@ -2,6 +2,19 @@
 members = ["crates/bacli", "crates/bitaxe_api"]
 resolver = "2"
 
+  [workspace.metadata.release]
+  sign-commit = true
+  sign-tag = true
+
+  pre-release-hook = [
+    "git",
+    "cliff",
+    "-o",
+    "CHANGELOG.md",
+    "--tag",
+    "{{version}}",
+  ]
+
 # The profile that 'dist' will build with
 [profile.dist]
 inherits = "release"
