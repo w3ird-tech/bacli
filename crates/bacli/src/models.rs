@@ -30,6 +30,8 @@ pub enum Command {
     Alias(AliasArgs),
     /// Scan the local network for devices
     Scan(ScanArgs),
+    /// Check and upgrade the device firmware
+    Upgrade(UpgradeArgs),
 }
 
 #[derive(Debug, Clone, Args)]
@@ -74,6 +76,18 @@ pub struct ScanArgs {
     /// Save any new found devices to the config.
     #[arg(short, long = "save")]
     pub should_save: bool,
+}
+
+#[derive(Debug, Clone, Args)]
+pub struct UpgradeArgs {
+    /// The URL of the device on the local network. This will usually be an IP address.
+    pub base: String,
+    /// Force the update even if the versions match
+    #[arg(short, long)]
+    pub force: bool,
+    /// Execute the update
+    #[arg(long)]
+    pub execute: bool,
 }
 
 #[serde_as]

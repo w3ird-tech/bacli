@@ -24,6 +24,7 @@ async fn main() -> anyhow::Result<()> {
         Command::List => list(cfg).await?,
         Command::Alias(args) => alias(cfg, args).await?,
         Command::Scan(args) => scan(cfg, args).await?,
+        Command::Upgrade(args) => upgrade(cfg, args).await?,
     }
 
     Ok(())
