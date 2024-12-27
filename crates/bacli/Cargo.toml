@@ -10,7 +10,7 @@ version = "0.2.0"
 
 [dependencies]
 anyhow = "1.0.94"
-bitaxe_api = { version = "0.1.0", path = "../bitaxe_api", features = ["clap"] }
+bitaxe_api = { version = "0.2.0", path = "../bitaxe_api", features = ["clap"] }
 clap = { version = "4.5.22", features = ["derive"] }
 comfy-table = "7.1.3"
 config = { version = "0.14.1", default-features = false, features = [
