@@ -1,5 +1,7 @@
+use std::time::Duration;
+
 use log::debug;
-use reqwest::{Client, Method, Response};
+use reqwest::{header::CONTENT_TYPE, Body, Client, Method, Response};
 use serde::Serialize;
 
 use crate::models::{Error, Result, Settings, SystemInfo};
@@ -14,7 +16,7 @@ impl BitaxeClient {
         let base = base.to_string();
 
         debug!("Initializing Bitaxe client at {}", base);
-        let client = Client::builder().build()?;
+        let client = Client::builder().timeout(Duration::from_secs(5)).build()?;
 
         Ok(Self { client, base })
     }
@@ -63,14 +65,38 @@ impl BitaxeClient {
         Ok(())
     }
 
+    fn gen_url(&self, path: &str) -> String {
+        format!("http://{}/api{}", self.base, path)
+    }
+
+    pub async fn upload_firmware_file(&self, contents: impl Into<Body>) -> Result<()> {
+        self.upload_file("/system/OTA", contents).await
+    }
+
+    pub async fn upload_www_file(&self, contents: impl Into<Body>) -> Result<()> {
+        self.upload_file("/system/OTAWWW", contents).await
+    }
+
+    async fn upload_file(&self, path: &str, contents: impl Into<Body>) -> Result<()> {
+        debug!("Uploading contents to {}", path);
+        self.client
+            .post(self.gen_url(path))
+            .header(CONTENT_TYPE, "application/octet-stream")
+            .body(contents)
+            .send()
+            .await?
+            .error_for_status()?;
+
+        Ok(())
+    }
+
     async fn send_request(
         &self,
         method: Method,
         path: &str,
         body: Option<impl Serialize>,
     ) -> Result<Response> {
-        let url = format!("http://{}/api{}", self.base, path);
-        let mut request = self.client.request(method.clone(), url);
+        let mut request = self.client.request(method.clone(), self.gen_url(path));
 
         if let Some(body) = body {
             request = request.json(&body);
