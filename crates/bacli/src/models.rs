@@ -8,6 +8,7 @@ use serde_with::{serde_as, skip_serializing_none};
 /// Bitaxe CLI is a wrapper around the Bitaxe API, enabling the management of a Bitaxe device
 /// in an easy to use way.
 #[derive(Debug, Clone, Parser)]
+#[command(version)]
 pub struct Cli {
     #[arg(short, long, global = true)]
     pub config: Option<String>,
