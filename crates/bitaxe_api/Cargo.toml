@@ -11,7 +11,12 @@ version = "0.2.0"
 [dependencies]
 clap = { version = "4.5.23", optional = true }
 log = "0.4.22"
-reqwest = { version = "0.12.9", features = ["json"] }
+reqwest = { version = "0.12.9", default-features = false, features = [
+  "charset",
+  "http2",
+  "macos-system-configuration",
+  "json",
+] }
 serde = { version = "1.0.215", features = ["derive"] }
 serde_repr = "0.1.19"
 serde_with = "3.11.0"
@@ -19,6 +24,9 @@ thiserror = "2.0.4"
 
 [features]
 clap = ["dep:clap"]
+default = ["openssl"]
+openssl = ["reqwest/native-tls"]
+rustls = ["reqwest/rustls-tls"]
 
 [dev-dependencies]
 serde_json = "1.0.133"
