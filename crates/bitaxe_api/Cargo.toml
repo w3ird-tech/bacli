@@ -9,7 +9,7 @@ repository = "https://github.com/w3ird-tech/bacli"
 version = "0.2.1"
 
 [dependencies]
-clap = { version = "4.5.23", optional = true }
+clap = { version = "4.5.26", optional = true }
 log = "0.4.22"
 reqwest = { version = "0.12.12", default-features = false, features = [
   "charset",
@@ -20,7 +20,7 @@ reqwest = { version = "0.12.12", default-features = false, features = [
 serde = { version = "1.0.217", features = ["derive"] }
 serde_repr = "0.1.19"
 serde_with = "3.12.0"
-thiserror = "2.0.9"
+thiserror = "2.0.11"
 
 [features]
 clap = ["dep:clap"]
@@ -29,4 +29,4 @@ openssl = ["reqwest/native-tls"]
 rustls = ["reqwest/rustls-tls"]
 
 [dev-dependencies]
-serde_json = "1.0.134"
+serde_json = "1.0.135"
