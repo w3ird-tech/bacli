@@ -6,11 +6,11 @@ homepage = "https://github.com/w3ird-tech/bacli"
 license = "	AGPL-3.0-only"
 name = "bacli"
 repository = "https://github.com/w3ird-tech/bacli"
-version = "0.5.1"
+version = "0.5.2"
 
 [dependencies]
 anyhow = "1.0.98"
-bitaxe_api = { version = "0.3.1", path = "../bitaxe_api", default-features = false, features = [
+bitaxe_api = { version = "0.3.2", path = "../bitaxe_api", default-features = false, features = [
   "rustls",
   "clap",
 ] }
