@@ -7,9 +7,7 @@ on:
 env:
   CARGO_INCREMENTAL: 0
   CARGO_TERM_COLOR: always
-  RUSTC_WRAPPER: "sccache"
   RUSTFLAGS: "-Dwarnings"
-  SCCACHE_GHA_ENABLED: "true"
 
 jobs:
   build:
@@ -34,9 +32,6 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Run sccache-cache
-        uses: mozilla-actions/sccache-action@v0.0.6
 
       - name: Check formatting
         run: cargo fmt --all --check
