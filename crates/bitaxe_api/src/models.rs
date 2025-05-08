@@ -20,6 +20,8 @@ pub enum Error {
 pub struct SystemInfo {
     #[serde(rename = "ASICModel")]
     pub asic_model: String,
+    #[serde_as(as = "BoolFromInt")]
+    pub ap_enabled: bool,
     pub asic_count: i64,
     #[serde_as(as = "BoolFromInt")]
     pub autofanspeed: bool,
@@ -29,6 +31,7 @@ pub struct SystemInfo {
     pub core_voltage: i64,
     pub core_voltage_actual: i64,
     pub current: f64,
+    pub display_timeout: i64,
     pub fallback_stratum_port: i64,
     #[serde(rename = "fallbackStratumURL")]
     pub fallback_stratum_url: String,
@@ -44,14 +47,19 @@ pub struct SystemInfo {
     pub frequency: i64,
     pub hash_rate: f64,
     pub hostname: String,
-    #[serde(rename = "invertfanpolarity")]
-    #[serde_as(as = "BoolFromInt")]
-    pub invert_fan_polarity: bool,
     #[serde(rename = "invertscreen")]
     #[serde_as(as = "BoolFromInt")]
     pub invert_screen: bool,
+    #[serde(rename = "isPSRAMAvailable")]
+    #[serde_as(as = "BoolFromInt")]
+    pub is_psram_available: bool,
     pub is_using_fallback_stratum: i64,
     pub mac_addr: String,
+    pub max_power: i64,
+    pub nominal_voltage: i64,
+    #[serde(rename = "overclockEnabled")]
+    #[serde_as(as = "BoolFromInt")]
+    pub overclock_enabled: bool,
     #[serde(rename = "overheat_mode")]
     #[serde_as(as = "BoolFromInt")]
     pub overheat_mode: bool,
@@ -59,18 +67,31 @@ pub struct SystemInfo {
     pub running_partition: String,
     pub shares_accepted: i64,
     pub shares_rejected: i64,
+    pub shares_rejected_reasons: Vec<ShareRejectedReason>,
     pub small_core_count: i64,
     pub ssid: String,
+    pub stratum_diff: i64,
     pub stratum_port: i64,
     #[serde(rename = "stratumURL")]
     pub stratum_url: String,
     pub stratum_user: String,
     pub temp: f64,
+    #[serde(rename = "temptarget")]
+    pub temp_target: f64,
     pub uptime_seconds: u64,
     pub version: String,
     pub voltage: f64,
     pub vr_temp: i64,
+    #[serde(rename = "wifiRSSI")]
+    pub wifi_rssi: i64,
     pub wifi_status: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ShareRejectedReason {
+    pub count: i64,
+    pub message: String,
 }
 
 /// Configurable settings available to change
