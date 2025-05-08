@@ -6,7 +6,7 @@ homepage = "https://github.com/w3ird-tech/bacli"
 license = "	AGPL-3.0-only"
 name = "bitaxe_api"
 repository = "https://github.com/w3ird-tech/bacli"
-version = "0.2.1"
+version = "0.3.0"
 
 [dependencies]
 clap = { version = "4.5.37", optional = true }
