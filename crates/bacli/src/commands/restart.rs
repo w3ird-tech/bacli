@@ -6,7 +6,7 @@ use crate::config::Config;
 use crate::models::RestartArgs;
 
 pub async fn restart(config: Config, args: RestartArgs) -> Result<()> {
-    debug!("Restarting device: {:?}", args);
+    debug!("Restarting device: {args:?}");
     let base = config
         .get_device(&args.base)
         .cloned()

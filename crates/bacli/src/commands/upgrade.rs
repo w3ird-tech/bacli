@@ -1,15 +1,11 @@
 use std::time::Duration;
 
 use anyhow::{bail, Result};
-use bitaxe_api::{
-    client::BitaxeClient,
-    models::{Error, SystemInfo},
-};
+use bitaxe_api::client::BitaxeClient;
+use bitaxe_api::models::{Error, SystemInfo};
 use log::debug;
-use reqwest::{
-    header::{HeaderName, ACCEPT},
-    Client, Response,
-};
+use reqwest::header::{HeaderName, ACCEPT};
+use reqwest::{Client, Response};
 use serde::Deserialize;
 
 use crate::config::Config;
@@ -33,40 +29,32 @@ pub async fn upgrade(config: Config, args: UpgradeArgs) -> Result<()> {
         version,
         ..
     } = client.system_info().await?;
-    debug!(
-        "Device info: board={}, firmware_version={}",
-        board_version, version
-    );
+    debug!("Device info: board={board_version}, firmware_version={version}");
 
     let latest_release = get_latest_release(&http).await?;
-    debug!("Latest esp-miner GitHub release: {}", latest_release);
+    debug!("Latest esp-miner GitHub release: {latest_release}");
 
     if version == latest_release && !args.force {
-        eprintln!(
-            "Device '{}' is up-to-date. Device version: {}",
-            base, version
-        );
+        eprintln!("Device '{base}' is up-to-date. Device version: {version}");
         return Ok(());
     }
 
     println!(
-        "Device '{}' is out-of-date. Device version: {}, Latest version: {}",
-        base, version, latest_release
+        "Device '{base}' is out-of-date. Device version: {version}, Latest version: {latest_release}"
     );
 
     if !args.execute {
         eprintln!(
             r#"This tool will perform the following:
 
-1. Download the most recent ({}) firmware and www bins.
+1. Download the most recent ({latest_release}) firmware and www bins.
 2. Upload the firmware file to /api/system/OTA.
 3. Upload the www file to /api/system/OTAWWW.
 
 Note: This is an experimental command. Use the device's web page if you're unsure.
 
 Pass --execute to run the update.
-"#,
-            latest_release
+"#
         );
 
         return Ok(());
@@ -88,7 +76,7 @@ Pass --execute to run the update.
         .await?;
     client.upload_www_file(www_file).await?;
 
-    eprintln!("Bitaxe {} successfully updated.", base);
+    eprintln!("Bitaxe {base} successfully updated.");
 
     Ok(())
 }
@@ -132,16 +120,13 @@ async fn get_latest_release(http: &Client) -> Result<String> {
         .json::<ReleaseResponse>()
         .await?;
 
-    debug!("GitHub latest release response: {:?}", response);
+    debug!("GitHub latest release response: {response:?}");
 
     Ok(response.tag_name)
 }
 
 async fn download_file(http: &Client, version: &str, filename: &str) -> Result<Response> {
-    let url = format!(
-        "https://github.com/skot/ESP-Miner/releases/download/{}/{}",
-        version, filename
-    );
+    let url = format!("https://github.com/skot/ESP-Miner/releases/download/{version}/{filename}");
     let response = http.get(url).send().await?.error_for_status()?;
 
     Ok(response)

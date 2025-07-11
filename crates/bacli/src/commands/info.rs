@@ -1,14 +1,15 @@
 use std::time::Duration;
 
 use anyhow::Result;
-use bitaxe_api::{client::BitaxeClient, models::SystemInfo};
+use bitaxe_api::client::BitaxeClient;
+use bitaxe_api::models::SystemInfo;
 use log::debug;
 
 use crate::config::Config;
 use crate::models::InfoArgs;
 
 pub async fn get_info(config: Config, args: InfoArgs) -> Result<()> {
-    debug!("Getting device info: {:?}", args);
+    debug!("Getting device info: {args:?}");
     let base = config
         .get_device(&args.base)
         .cloned()
@@ -17,7 +18,7 @@ pub async fn get_info(config: Config, args: InfoArgs) -> Result<()> {
 
     let client = BitaxeClient::new(&base)?;
     let info = client.system_info().await?;
-    debug!("Device info: {:?}", info);
+    debug!("Device info: {info:?}");
 
     let output = if args.json {
         serde_json::to_string(&info)?

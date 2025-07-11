@@ -1,4 +1,5 @@
-use std::{io::ErrorKind, path::PathBuf};
+use std::io::ErrorKind;
+use std::path::PathBuf;
 
 use anyhow::{anyhow, Error, Result};
 use directories::ProjectDirs;

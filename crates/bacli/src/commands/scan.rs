@@ -12,7 +12,7 @@ use crate::config::Config;
 use crate::models::ScanArgs;
 
 pub async fn scan(mut config: Config, args: ScanArgs) -> Result<()> {
-    debug!("Scanning network for devices: {:?}", args);
+    debug!("Scanning network for devices: {args:?}");
     let pool = reqwest::Client::builder()
         .timeout(Duration::from_secs(1))
         .build()?;

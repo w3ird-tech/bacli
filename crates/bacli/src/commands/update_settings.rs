@@ -6,7 +6,7 @@ use crate::config::Config;
 use crate::models::UpdateSetttingsArgs;
 
 pub async fn update_settings(config: Config, args: UpdateSetttingsArgs) -> Result<()> {
-    debug!("Updating device settings: {:?}", args);
+    debug!("Updating device settings: {args:?}");
     let base = config
         .get_device(&args.base)
         .cloned()

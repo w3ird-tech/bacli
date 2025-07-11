@@ -1,7 +1,8 @@
 use std::time::Duration;
 
 use log::debug;
-use reqwest::{header::CONTENT_TYPE, Body, Client, Method, Response};
+use reqwest::header::CONTENT_TYPE;
+use reqwest::{Body, Client, Method, Response};
 use serde::Serialize;
 
 use crate::models::{Error, Result, Settings, SystemInfo};
@@ -15,7 +16,7 @@ impl BitaxeClient {
     pub fn new(base: impl ToString) -> Result<Self> {
         let base = base.to_string();
 
-        debug!("Initializing Bitaxe client at {}", base);
+        debug!("Initializing Bitaxe client at {base}");
         let client = Client::builder().timeout(Duration::from_secs(5)).build()?;
 
         Ok(Self { client, base })
@@ -24,7 +25,7 @@ impl BitaxeClient {
     pub fn new_with_client(client: Client, base: impl ToString) -> Self {
         let base = base.to_string();
 
-        debug!("Initializing Bitaxe client with client at {}", base);
+        debug!("Initializing Bitaxe client with client at {base}");
 
         Self {
             client,
@@ -50,7 +51,7 @@ impl BitaxeClient {
             .text()
             .await?;
 
-        debug!("Restart response: {}", response);
+        debug!("Restart response: {response}");
         Ok(())
     }
 
@@ -61,7 +62,7 @@ impl BitaxeClient {
             .text()
             .await?;
 
-        debug!("Settings response: {}", response);
+        debug!("Settings response: {response}");
         Ok(())
     }
 
@@ -78,7 +79,7 @@ impl BitaxeClient {
     }
 
     async fn upload_file(&self, path: &str, contents: impl Into<Body>) -> Result<()> {
-        debug!("Uploading contents to {}", path);
+        debug!("Uploading contents to {path}");
         self.client
             .post(self.gen_url(path))
             .header(CONTENT_TYPE, "application/octet-stream")
@@ -102,7 +103,7 @@ impl BitaxeClient {
             request = request.json(&body);
         }
 
-        debug!("Sending {} to {}", method, path);
+        debug!("Sending {method} to {path}");
         let response = request.send().await?;
         let status = response.status();
 
