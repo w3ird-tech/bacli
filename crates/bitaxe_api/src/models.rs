@@ -22,7 +22,9 @@ pub struct SystemInfo {
     pub asic_model: String,
     #[serde_as(as = "BoolFromInt")]
     pub ap_enabled: bool,
-    pub asic_count: i64,
+    // TODO: Remove in 0.5.0
+    #[deprecated(since = "0.4.0", note = "Moved to SystemAsic")]
+    pub asic_count: Option<i64>,
     #[serde_as(as = "BoolFromInt")]
     pub autofanspeed: bool,
     pub best_diff: String,
@@ -40,9 +42,11 @@ pub struct SystemInfo {
     pub fan_rpm: i64,
     #[serde(rename = "fanspeed")]
     pub fan_speed: i64,
+    // TODO: Remove in 0.5.0
+    #[deprecated(since = "0.4.0", note = "Renamed to rotation")]
     #[serde(rename = "flipscreen")]
-    #[serde_as(as = "BoolFromInt")]
-    pub flip_screen: bool,
+    #[serde_as(as = "Option<BoolFromInt>")]
+    pub flip_screen: Option<bool>,
     pub free_heap: i64,
     pub frequency: i64,
     pub hash_rate: f64,
@@ -64,13 +68,22 @@ pub struct SystemInfo {
     #[serde_as(as = "BoolFromInt")]
     pub overheat_mode: bool,
     pub power: f64,
+    /// Added in ESP-Miner v0.9.0
+    // TODO: Remove Option in 0.5.0
+    #[serde(rename = "poolDifficulty")]
+    pub pool_difficulty: Option<i64>,
+    /// Added in ESP-Miner v0.9.0
+    // TODO: Remove Option in 0.5.0
+    pub rotation: Option<Rotation>,
     pub running_partition: String,
     pub shares_accepted: i64,
     pub shares_rejected: i64,
     pub shares_rejected_reasons: Vec<ShareRejectedReason>,
     pub small_core_count: i64,
     pub ssid: String,
-    pub stratum_diff: i64,
+    // TODO: Remove in 0.5.0
+    #[deprecated(since = "0.4.0", note = "Renamed to pool_difficulty")]
+    pub stratum_diff: Option<i64>,
     pub stratum_port: i64,
     #[serde(rename = "stratumURL")]
     pub stratum_url: String,
@@ -85,6 +98,15 @@ pub struct SystemInfo {
     #[serde(rename = "wifiRSSI")]
     pub wifi_rssi: i64,
     pub wifi_status: String,
+}
+
+#[derive(Debug, Clone, Serialize_repr, Deserialize_repr)]
+#[repr(u16)]
+pub enum Rotation {
+    Zero = 0,
+    Ninety = 90,
+    OneHundredEighty = 180,
+    TwoHundredSeventy = 270,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
