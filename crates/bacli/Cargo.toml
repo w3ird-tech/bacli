@@ -15,7 +15,7 @@ bitaxe_api = { version = "0.4.0", path = "../bitaxe_api", default-features = fal
   "clap",
 ] }
 clap = { version = "4.5.47", features = ["derive"] }
-comfy-table = "7.2.0"
+comfy-table = "7.2.1"
 config = { version = "0.15.15", default-features = false, features = [
   "async",
   "convert-case",
@@ -24,12 +24,12 @@ config = { version = "0.15.15", default-features = false, features = [
 directories = "6.0.0"
 env_logger = "0.11.5"
 futures = "0.3.31"
-humantime = "2.2.0"
+humantime = "2.3.0"
 ipnetwork = "0.21.1"
 log = "0.4.28"
 reqwest = "0.12.23"
-serde = { version = "1.0.219", features = ["derive"] }
-serde_json = "1.0.143"
+serde = { version = "1.0.223", features = ["derive"] }
+serde_json = "1.0.145"
 serde_with = "3.14.0"
 serde_yaml = "0.9.34"
 tokio = { version = "1.47.1", features = ["fs", "macros", "rt-multi-thread"] }
