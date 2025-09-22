@@ -9,7 +9,7 @@ repository = "https://github.com/w3ird-tech/bacli"
 version = "0.4.0"
 
 [dependencies]
-clap = { version = "4.5.47", optional = true }
+clap = { version = "4.5.48", optional = true }
 log = "0.4.28"
 reqwest = { version = "0.12.23", default-features = false, features = [
   "charset",
@@ -17,9 +17,9 @@ reqwest = { version = "0.12.23", default-features = false, features = [
   "macos-system-configuration",
   "json",
 ] }
-serde = { version = "1.0.223", features = ["derive"] }
+serde = { version = "1.0.226", features = ["derive"] }
 serde_repr = "0.1.20"
-serde_with = "3.14.0"
+serde_with = "3.14.1"
 thiserror = "2.0.16"
 
 [features]
