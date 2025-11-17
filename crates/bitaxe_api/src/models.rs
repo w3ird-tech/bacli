@@ -2,6 +2,8 @@ use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 use serde_with::{serde_as, skip_serializing_none, BoolFromInt};
 
+use crate::serde_utils::StringOrInt;
+
 pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug, thiserror::Error)]
@@ -22,13 +24,10 @@ pub struct SystemInfo {
     pub asic_model: String,
     #[serde_as(as = "BoolFromInt")]
     pub ap_enabled: bool,
-    // TODO: Remove in 0.5.0
-    #[deprecated(since = "0.4.0", note = "Moved to SystemAsic")]
-    pub asic_count: Option<i64>,
     #[serde_as(as = "BoolFromInt")]
     pub autofanspeed: bool,
-    pub best_diff: String,
-    pub best_session_diff: String,
+    pub best_diff: StringOrInt,
+    pub best_session_diff: StringOrInt,
     pub board_version: String,
     pub core_voltage: i64,
     pub core_voltage_actual: i64,
@@ -41,12 +40,7 @@ pub struct SystemInfo {
     #[serde(rename = "fanrpm")]
     pub fan_rpm: i64,
     #[serde(rename = "fanspeed")]
-    pub fan_speed: i64,
-    // TODO: Remove in 0.5.0
-    #[deprecated(since = "0.4.0", note = "Renamed to rotation")]
-    #[serde(rename = "flipscreen")]
-    #[serde_as(as = "Option<BoolFromInt>")]
-    pub flip_screen: Option<bool>,
+    pub fan_speed: f64,
     pub free_heap: i64,
     pub frequency: i64,
     pub hash_rate: f64,
@@ -68,22 +62,15 @@ pub struct SystemInfo {
     #[serde_as(as = "BoolFromInt")]
     pub overheat_mode: bool,
     pub power: f64,
-    /// Added in ESP-Miner v0.9.0
-    // TODO: Remove Option in 0.5.0
     #[serde(rename = "poolDifficulty")]
-    pub pool_difficulty: Option<i64>,
-    /// Added in ESP-Miner v0.9.0
-    // TODO: Remove Option in 0.5.0
-    pub rotation: Option<Rotation>,
+    pub pool_difficulty: i64,
+    pub rotation: Rotation,
     pub running_partition: String,
     pub shares_accepted: i64,
     pub shares_rejected: i64,
     pub shares_rejected_reasons: Vec<ShareRejectedReason>,
     pub small_core_count: i64,
     pub ssid: String,
-    // TODO: Remove in 0.5.0
-    #[deprecated(since = "0.4.0", note = "Renamed to pool_difficulty")]
-    pub stratum_diff: Option<i64>,
     pub stratum_port: i64,
     #[serde(rename = "stratumURL")]
     pub stratum_url: String,

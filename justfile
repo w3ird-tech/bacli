@@ -7,3 +7,4 @@ lint:
     cargo +nightly fmt
     cargo check
     cargo clippy --all-targets --all-features
+    cargo machete --with-metadata

@@ -1,12 +1,12 @@
 [package]
-authors = ["w3irdrobot <dro@w3ird.tech>"]
+authors     = ["w3irdrobot <dro@w3ird.tech>"]
 description = "Crate for interacting with the Bitaxe API."
-edition = "2021"
-homepage = "https://github.com/w3ird-tech/bacli"
-license = "	AGPL-3.0-only"
-name = "bitaxe_api"
-repository = "https://github.com/w3ird-tech/bacli"
-version = "0.4.0"
+edition     = "2021"
+homepage    = "https://github.com/w3ird-tech/bacli"
+license     = "	AGPL-3.0-only"
+name        = "bitaxe_api"
+repository  = "https://github.com/w3ird-tech/bacli"
+version     = "0.4.0"
 
 [dependencies]
 clap = { version = "4.5.51", optional = true }
@@ -14,19 +14,20 @@ log = "0.4.28"
 reqwest = { version = "0.12.24", default-features = false, features = [
   "charset",
   "http2",
-  "macos-system-configuration",
   "json",
+  "macos-system-configuration",
 ] }
 serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
 serde_repr = "0.1.20"
 serde_with = "3.15.1"
 thiserror = "2.0.17"
 
 [features]
-clap = ["dep:clap"]
+clap    = ["dep:clap"]
 default = ["openssl"]
 openssl = ["reqwest/native-tls"]
-rustls = ["reqwest/rustls-tls"]
+rustls  = ["reqwest/rustls-tls"]
 
 [dev-dependencies]
 serde_json = "1.0.145"
