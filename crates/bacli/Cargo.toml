@@ -10,7 +10,7 @@ version = "0.6.0"
 
 [dependencies]
 anyhow = "1.0.100"
-bitaxe_api = { version = "0.4.0", path = "../bitaxe_api", default-features = false, features = [
+bitaxe_api = { version = "0.5.0", path = "../bitaxe_api", default-features = false, features = [
   "rustls",
   "clap",
 ] }
