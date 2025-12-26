@@ -11,7 +11,7 @@ version     = "0.5.1"
 [dependencies]
 clap = { version = "4.5.53", optional = true }
 log = "0.4.29"
-reqwest = { version = "0.12.25", default-features = false, features = [
+reqwest = { version = "0.12.26", default-features = false, features = [
   "charset",
   "http2",
   "json",
