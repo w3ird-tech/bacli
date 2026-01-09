@@ -1,18 +1,18 @@
 [package]
-authors = ["w3irdrobot <dro@w3ird.tech>"]
+authors     = ["w3irdrobot <dro@w3ird.tech>"]
 description = "A wrapper around the Bitaxe API, enabling the management of a Bitaxe device in an easy to use way."
-edition = "2021"
-homepage = "https://github.com/w3ird-tech/bacli"
-license = "	AGPL-3.0-only"
-name = "bacli"
-repository = "https://github.com/w3ird-tech/bacli"
-version = "0.7.0"
+edition     = "2021"
+homepage    = "https://github.com/w3ird-tech/bacli"
+license     = "	AGPL-3.0-only"
+name        = "bacli"
+repository  = "https://github.com/w3ird-tech/bacli"
+version     = "0.7.0"
 
 [dependencies]
 anyhow = "1.0.100"
 bitaxe_api = { version = "0.5.1", path = "../bitaxe_api", default-features = false, features = [
-  "rustls",
   "clap",
+  "rustls",
 ] }
 clap = { version = "4.5.54", features = ["derive"] }
 comfy-table = "7.2.1"
@@ -27,7 +27,7 @@ futures = "0.3.31"
 humantime = "2.3.0"
 ipnetwork = "0.21.1"
 log = "0.4.29"
-reqwest = "0.12.28"
+reqwest = "0.13.1"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.148"
 serde_with = "3.16.1"
