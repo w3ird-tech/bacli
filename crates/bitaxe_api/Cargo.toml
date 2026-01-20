@@ -21,7 +21,7 @@ serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
 serde_repr = "0.1.20"
 serde_with = "3.16.1"
-thiserror = "2.0.17"
+thiserror = "2.0.18"
 
 [features]
 clap    = ["dep:clap"]
