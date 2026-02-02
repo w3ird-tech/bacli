@@ -9,7 +9,7 @@ repository  = "https://github.com/w3ird-tech/bacli"
 version     = "0.5.1"
 
 [dependencies]
-clap = { version = "4.5.54", optional = true }
+clap = { version = "4.5.56", optional = true }
 log = "0.4.29"
 reqwest = { version = "0.13.1", default-features = false, features = [
   "charset",

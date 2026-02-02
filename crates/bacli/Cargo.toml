@@ -14,7 +14,7 @@ bitaxe_api = { version = "0.5.1", path = "../bitaxe_api", default-features = fal
   "clap",
   "rustls",
 ] }
-clap = { version = "4.5.54", features = ["derive"] }
+clap = { version = "4.5.56", features = ["derive"] }
 comfy-table = "7.2.2"
 config = { version = "0.15.19", default-features = false, features = [
   "async",
