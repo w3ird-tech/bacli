@@ -9,12 +9,12 @@ repository  = "https://github.com/w3ird-tech/bacli"
 version     = "0.7.0"
 
 [dependencies]
-anyhow = "1.0.100"
+anyhow = "1.0.101"
 bitaxe_api = { version = "0.5.1", path = "../bitaxe_api", default-features = false, features = [
   "clap",
   "rustls",
 ] }
-clap = { version = "4.5.54", features = ["derive"] }
+clap = { version = "4.5.57", features = ["derive"] }
 comfy-table = "7.2.2"
 config = { version = "0.15.19", default-features = false, features = [
   "async",
@@ -27,7 +27,7 @@ futures = "0.3.31"
 humantime = "2.3.0"
 ipnetwork = "0.21.1"
 log = "0.4.29"
-reqwest = "0.13.1"
+reqwest = "0.13.2"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
 serde_with = "3.16.1"
