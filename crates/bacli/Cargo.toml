@@ -14,7 +14,7 @@ bitaxe_api = { version = "0.5.1", path = "../bitaxe_api", default-features = fal
   "clap",
   "rustls",
 ] }
-clap = { version = "4.5.57", features = ["derive"] }
+clap = { version = "4.5.58", features = ["derive"] }
 comfy-table = "7.2.2"
 config = { version = "0.15.19", default-features = false, features = [
   "async",
@@ -23,7 +23,7 @@ config = { version = "0.15.19", default-features = false, features = [
 ] }
 directories = "6.0.0"
 env_logger = "0.11.5"
-futures = "0.3.31"
+futures = "0.3.32"
 humantime = "2.3.0"
 ipnetwork = "0.21.1"
 log = "0.4.29"
