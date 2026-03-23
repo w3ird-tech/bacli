@@ -16,7 +16,7 @@ bitaxe_api = { version = "0.5.1", path = "../bitaxe_api", default-features = fal
 ] }
 clap = { version = "4.6.0", features = ["derive"] }
 comfy-table = "7.2.2"
-config = { version = "0.15.21", default-features = false, features = [
+config = { version = "0.15.22", default-features = false, features = [
   "async",
   "convert-case",
   "yaml",
