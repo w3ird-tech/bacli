@@ -22,7 +22,7 @@ config = { version = "0.15.22", default-features = false, features = [
   "yaml",
 ] }
 directories = "6.0.0"
-env_logger = "0.11.9"
+env_logger = "0.11.10"
 futures = "0.3.32"
 humantime = "2.3.0"
 ipnetwork = "0.21.1"
