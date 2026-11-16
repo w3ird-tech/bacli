@@ -4,7 +4,7 @@ default:
     just --list
 
 lint:
-    cargo +nightly fmt
+    cargo fmt
     cargo check
     cargo clippy --all-targets --all-features
     cargo machete --with-metadata

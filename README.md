@@ -9,16 +9,36 @@ Download the latest release from [GitHub Releases](https://github.com/w3ird-tech
 
 ## Development
 
-Bacli is built on stable Rust. Ensure Rust is installed; the easiest way to do so is using
-[`rustup`](https://rustup.rs/).
-
-To build, use cargo in release mode from the root of the project.
+From the repository root, with Nix flakes enabled:
 
 ```shell
-cargo build --release
+nix develop
+cargo build --locked             # target/debug/bacli
+cargo build --release --locked   # target/release/bacli
+cargo run -- --help
 ```
 
-The binary will be available at `target/release/bacli`.
+Run checks inside the shell:
+
+```shell
+just lint
+cargo test --workspace --all-features --locked
+```
+
+Without Nix, install stable Rust, OpenSSL, pkg-config, and CMake, then use the same
+Cargo commands. Use `cargo +nightly fmt` for formatting.
+
+## Nix builds
+
+Build directly without entering the shell:
+
+```shell
+nix build .#dev      # dev build
+nix build .#release  # release build (also the default for nix build)
+./result/bin/bacli --help
+```
+
+Nix supports x86_64/aarch64 Linux and Apple Silicon macOS.
 
 ## Support
 

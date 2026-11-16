@@ -11,6 +11,10 @@ Add the crate to your project easily using `cargo add`.
 cargo add bitaxe-api
 ```
 
+## Development
+
+See the [root README](../../README.md#development) for setup, builds, and checks.
+
 ## Support
 
 PRs are more than welcome!
