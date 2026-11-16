@@ -7,6 +7,20 @@ device in an easy to use way.
 
 Download the latest release from [GitHub Releases](https://github.com/w3ird-tech/bacli/releases).
 
+## Firmware compatibility
+
+bacli supports [ESP-Miner](https://github.com/bitaxeorg/ESP-Miner) v2.0.0 and newer. It detects
+the device's firmware version and sends settings in the format that version understands:
+
+- `info` and `scan` work with v2.0.0 and newer.
+- `update-settings` needs v2.0.4 or newer. Options that the device's firmware does not support,
+  such as `--invert-fan-polarity` on v2.7.0 and newer, fail with an error instead of being
+  ignored. On v2.15.0 and newer, the pool options update the device's main and fallback pool
+  slots.
+- `upgrade` installs the latest release by default, or a specific one with `--version <TAG>`. It
+  verifies checksums when the release publishes them, and only uploads `www.bin` for releases
+  that still ship one (before v2.15.0).
+
 ## Development
 
 From the repository root, with Nix flakes enabled:

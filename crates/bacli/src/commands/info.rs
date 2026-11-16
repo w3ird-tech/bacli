@@ -33,6 +33,11 @@ pub async fn get_info(config: Config, args: InfoArgs) -> Result<()> {
 
 fn build_table(base: &str, info: SystemInfo) -> String {
     let runtime = humantime::format_duration(Duration::from_secs(info.uptime_seconds));
+    let unknown = || "Unknown".to_string();
+    let fallback = match (&info.fallback_stratum_url, info.fallback_stratum_port) {
+        (Some(url), Some(port)) if !url.is_empty() => format!("{url}:{port}"),
+        _ => "Not configured".to_string(),
+    };
 
     format!(
         r#"Address: {}
@@ -57,11 +62,11 @@ User: {}
 
 Fallback Pool
 ---------
-URL: {}:{}
+URL: {}
 User: {}
 "#,
         base,
-        info.board_version,
+        info.board_version.unwrap_or_else(unknown),
         info.version,
         runtime,
         info.hash_rate.round(),
@@ -71,8 +76,7 @@ User: {}
         info.stratum_url,
         info.stratum_port,
         info.stratum_user,
-        info.fallback_stratum_url,
-        info.fallback_stratum_port,
-        info.fallback_stratum_user
+        fallback,
+        info.fallback_stratum_user.unwrap_or_default(),
     )
 }
