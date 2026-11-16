@@ -1,7 +1,7 @@
 use std::net::IpAddr;
 
 use bitaxe_api::models::Settings;
-use clap::{Args, Parser, Subcommand};
+use clap::{Args, ColorChoice, Parser, Subcommand};
 use serde::{Deserialize, Serialize};
 use serde_with::{serde_as, skip_serializing_none};
 
@@ -42,6 +42,9 @@ pub struct InfoArgs {
     /// Output JSON instead of the formatted information.
     #[arg(long, default_value_t = false)]
     pub json: bool,
+    /// When to color the formatted information. `auto` colors only when writing to a terminal.
+    #[arg(long, value_name = "WHEN", default_value_t = ColorChoice::Auto)]
+    pub color: ColorChoice,
 }
 
 #[derive(Debug, Clone, Args)]

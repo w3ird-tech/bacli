@@ -1,8 +1,10 @@
-use std::time::Duration;
+mod view;
+
+use std::io::IsTerminal;
 
 use anyhow::Result;
 use bitaxe_api::client::BitaxeClient;
-use bitaxe_api::models::SystemInfo;
+use clap::ColorChoice;
 use log::debug;
 
 use crate::config::Config;
@@ -20,63 +22,25 @@ pub async fn get_info(config: Config, args: InfoArgs) -> Result<()> {
     let info = client.system_info().await?;
     debug!("Device info: {info:?}");
 
-    let output = if args.json {
-        serde_json::to_string(&info)?
+    if args.json {
+        println!("{}", serde_json::to_string(&info)?);
     } else {
-        build_table(&base, info)
-    };
-
-    println!("{output}");
+        print!("{}", view::render(&base, &info, use_color(args.color)));
+    }
 
     Ok(())
 }
 
-fn build_table(base: &str, info: SystemInfo) -> String {
-    let runtime = humantime::format_duration(Duration::from_secs(info.uptime_seconds));
-    let unknown = || "Unknown".to_string();
-    let fallback = match (&info.fallback_stratum_url, info.fallback_stratum_port) {
-        (Some(url), Some(port)) if !url.is_empty() => format!("{url}:{port}"),
-        _ => "Not configured".to_string(),
-    };
-
-    format!(
-        r#"Address: {}
-Board: {}
-ESP Miner: {}
-Uptime: {}
-
-Mining
-------
-Hash Rate: {} GH/s
-Shares: {}
-
-Wifi
-----
-SSID: {}
-Status: {}
-
-Main Pool
----------
-URL: {}:{}
-User: {}
-
-Fallback Pool
----------
-URL: {}
-User: {}
-"#,
-        base,
-        info.board_version.unwrap_or_else(unknown),
-        info.version,
-        runtime,
-        info.hash_rate.round(),
-        info.shares_accepted,
-        info.ssid,
-        info.wifi_status,
-        info.stratum_url,
-        info.stratum_port,
-        info.stratum_user,
-        fallback,
-        info.fallback_stratum_user.unwrap_or_default(),
-    )
+/// Whether to color the output. `auto` colors only when writing to a terminal that has not
+/// opted out through `NO_COLOR` or `TERM=dumb`.
+fn use_color(choice: ColorChoice) -> bool {
+    match choice {
+        ColorChoice::Always => true,
+        ColorChoice::Never => false,
+        ColorChoice::Auto => {
+            let no_color = std::env::var_os("NO_COLOR").is_some_and(|value| !value.is_empty());
+            let dumb = std::env::var_os("TERM").is_some_and(|term| term == "dumb");
+            std::io::stdout().is_terminal() && !no_color && !dumb
+        }
+    }
 }

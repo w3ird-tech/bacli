@@ -9,6 +9,7 @@ repository  = "https://github.com/w3ird-tech/bacli"
 version     = "0.7.0"
 
 [dependencies]
+anstyle = "1.0.14"
 anyhow = "1.0.104"
 bitaxe_api = { version = "0.5.1", path = "../bitaxe_api", default-features = false, features = [
   "clap",
@@ -24,7 +25,6 @@ config = { version = "0.15.27", default-features = false, features = [
 directories = "6.0.0"
 env_logger = "0.11.11"
 futures = "0.3.34"
-humantime = "2.4.0"
 ipnetwork = "0.21.1"
 log = "0.4.35"
 reqwest = "0.13.5"
