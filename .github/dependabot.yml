@@ -6,10 +6,14 @@
 version: 2
 updates:
   - package-ecosystem: "cargo"
-    directories: ["/", "crates/*"]
+    directory: "/"
     groups:
       versions:
         applies-to: version-updates
         update-types: [minor, patch]
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
       interval: "weekly"
