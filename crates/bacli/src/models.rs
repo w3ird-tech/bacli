@@ -83,7 +83,10 @@ pub struct ScanArgs {
 pub struct UpgradeArgs {
     /// The URL of the device on the local network. This will usually be an IP address.
     pub base: String,
-    /// Force the update even if the versions match
+    /// The esp-miner release tag to install, e.g. v2.13.2. Defaults to the latest release.
+    #[arg(long, value_name = "TAG")]
+    pub version: Option<String>,
+    /// Force the update even if the device already runs the same or a newer version.
     #[arg(short, long)]
     pub force: bool,
     /// Execute the update

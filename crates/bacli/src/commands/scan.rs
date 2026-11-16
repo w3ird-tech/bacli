@@ -40,7 +40,7 @@ pub async fn scan(mut config: Config, args: ScanArgs) -> Result<()> {
         table.add_row(vec![
             ip.to_string(),
             alias,
-            info.board_version,
+            info.board_version.unwrap_or_else(|| "Unknown".to_string()),
             info.version,
         ]);
     }
