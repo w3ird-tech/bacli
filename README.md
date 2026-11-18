@@ -13,6 +13,9 @@ bacli supports [ESP-Miner](https://github.com/bitaxeorg/ESP-Miner) v2.0.0 and ne
 the device's firmware version and sends settings in the format that version understands:
 
 - `info` and `scan` work with v2.0.0 and newer.
+  When the pool in use publishes statistics per mining address, `info` also shows a `Dashboard`
+  link to that page. This covers Solo CKPool, OCEAN, Public Pool and BTC PoW Lab, and is a
+  shortcut for the pool the device already uses, not a recommendation.
 - `update-settings` needs v2.0.4 or newer. Options that the device's firmware does not support,
   such as `--invert-fan-polarity` on v2.7.0 and newer, fail with an error instead of being
   ignored. On v2.15.0 and newer, the pool options update the device's main and fallback pool
