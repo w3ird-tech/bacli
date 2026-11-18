@@ -7,6 +7,8 @@ use anstyle::{AnsiColor, Style};
 use bitaxe_api::models::{StringOrInt, SystemInfo};
 use serde_json::Value;
 
+use super::dashboard::pool_dashboard;
+
 const INDENT: &str = "  ";
 const SEPARATOR: &str = " · ";
 /// Spaces between a label and its value.
@@ -146,6 +148,9 @@ struct Row {
     marker: Marker,
     left: Field,
     right: Option<Field>,
+    /// Whether the row may run past the rest of the screen without widening it. Used for values
+    /// that cannot be shortened, such as links.
+    overflow: bool,
 }
 
 impl Row {
@@ -154,6 +159,15 @@ impl Row {
             marker: Marker::None,
             left: field,
             right: None,
+            overflow: false,
+        }
+    }
+
+    /// A row holding a value that is kept whole however long it is.
+    fn overflowing(field: Field) -> Self {
+        Self {
+            overflow: true,
+            ..Self::single(field)
         }
     }
 
@@ -169,6 +183,7 @@ impl Row {
             marker: Marker::None,
             left,
             right,
+            overflow: false,
         })
     }
 }
@@ -191,8 +206,7 @@ pub fn render(base: &str, info: &SystemInfo, color: bool) -> String {
     .map(|(title, rows)| Section { title, rows })
     .collect();
 
-    let body = layout(&sections);
-    let body_width = body.iter().map(Text::width).max().unwrap_or(0);
+    let (body, body_width) = layout(&sections);
 
     let mut lines = vec![title_line(base, info, body_width), subtitle_line(info)];
     if info.overheat_mode == Some(true) {
@@ -212,8 +226,9 @@ pub fn render(base: &str, info: &SystemInfo, color: bool) -> String {
     out
 }
 
-/// Turns sections into lines, sharing column widths across all of them.
-fn layout(sections: &[Section]) -> Vec<Text> {
+/// Turns sections into lines, sharing column widths across all of them. Also returns the width of
+/// the widest line, leaving out rows that are allowed to overflow.
+fn layout(sections: &[Section]) -> (Vec<Text>, usize) {
     let rows = || sections.iter().flat_map(|s| &s.rows);
     let width = |label: &str| label.chars().count();
 
@@ -233,6 +248,7 @@ fn layout(sections: &[Section]) -> Vec<Text> {
     let right_start = left_start + left_width + COLUMN_GAP;
 
     let mut lines = Vec::new();
+    let mut body_width = 0;
     for section in sections {
         lines.push(Text::default());
         lines.push(Text::new(section.title, Tone::Bold));
@@ -256,10 +272,13 @@ fn layout(sections: &[Section]) -> Vec<Text> {
                     .append(right.value.clone());
             }
 
+            if !row.overflow {
+                body_width = body_width.max(line.width());
+            }
             lines.push(line);
         }
     }
-    lines
+    (lines, body_width)
 }
 
 fn title_line(base: &str, info: &SystemInfo, body_width: usize) -> Text {
@@ -474,11 +493,17 @@ fn pools(info: &SystemInfo) -> Vec<Row> {
         if !user.is_empty() {
             value = value.part(shorten_user(user), Tone::Plain);
         }
-        Row {
+        let mut rows = vec![Row {
             marker: marker(active),
             left: Field::new(label, value),
             right: None,
+            overflow: false,
+        }];
+        // Only the pool in use gets a link, to where its shares are showing up right now.
+        if let Some(link) = active.then(|| pool_dashboard(url, user)).flatten() {
+            rows.push(Row::overflowing(Field::new("Dashboard", Text::plain(link))));
         }
+        rows
     };
 
     // Firmware v2.15.0 and newer reports pool slots.
@@ -489,7 +514,7 @@ fn pools(info: &SystemInfo) -> Vec<Row> {
         .iter()
         .flatten()
         .filter(|pool| !pool.stratum_url.is_empty())
-        .map(|pool| {
+        .flat_map(|pool| {
             let (label, active) = if pool.id == primary_index {
                 ("Primary".to_string(), !on_fallback)
             } else if pool.id == fallback_index {
@@ -510,17 +535,17 @@ fn pools(info: &SystemInfo) -> Vec<Row> {
         return slots;
     }
 
-    let mut rows = vec![pool_row(
+    let mut rows = pool_row(
         "Primary".to_string(),
         !on_fallback,
         &info.stratum_url,
         info.stratum_port,
         &info.stratum_user,
-    )];
+    );
 
     // Firmware older than v2.3.0 has no fallback pool, so the row is left out entirely.
     if let Some(url) = &info.fallback_stratum_url {
-        rows.push(match (url.is_empty(), info.fallback_stratum_port) {
+        rows.extend(match (url.is_empty(), info.fallback_stratum_port) {
             (false, Some(port)) => pool_row(
                 "Fallback".to_string(),
                 on_fallback,
@@ -528,11 +553,12 @@ fn pools(info: &SystemInfo) -> Vec<Row> {
                 port,
                 info.fallback_stratum_user.as_deref().unwrap_or_default(),
             ),
-            _ => Row {
+            _ => vec![Row {
                 marker: Marker::Inactive,
                 left: Field::new("Fallback", Text::new("not configured", Tone::Dim)),
                 right: None,
-            },
+                overflow: false,
+            }],
         });
     }
 
@@ -734,6 +760,57 @@ Pools
 
         assert!(output.contains("● Primary    public-pool.io:21496"));
         assert!(output.contains("○ Fallback   not configured"));
+    }
+
+    #[test]
+    fn links_the_dashboard_of_the_pool_in_use_without_widening_the_screen() {
+        const ADDRESS: &str = "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq";
+
+        let mut info = latest();
+        for pool in info.pools.iter_mut().flatten() {
+            pool.stratum_user = format!("{ADDRESS}.bitaxe");
+        }
+        let plain = render("192.168.1.42", &latest(), false);
+        let output = render("192.168.1.42", &info, false);
+
+        // The device is on its fallback pool, so the primary pool gets no link.
+        assert!(output.ends_with(
+            "\
+Pools
+○ Primary    public-pool.io:21496 · bc1qar0s…wf5mdq.bitaxe
+● Fallback   solo.ckpool.org:3333 · bc1qar0s…wf5mdq.bitaxe
+  Dashboard  https://stats.ckpool.org/users/bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
+"
+        ));
+        assert_eq!(output.lines().next(), plain.lines().next());
+
+        info.is_using_fallback_stratum = Some(false);
+        let output = render("192.168.1.42", &info, false);
+
+        assert!(output.ends_with(
+            "\
+Pools
+● Primary    public-pool.io:21496 · bc1qar0s…wf5mdq.bitaxe
+  Dashboard  https://web.public-pool.io/#/app/bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
+○ Fallback   solo.ckpool.org:3333 · bc1qar0s…wf5mdq.bitaxe
+"
+        ));
+    }
+
+    #[test]
+    fn links_the_dashboard_on_firmware_without_pool_slots() {
+        let mut info = oldest();
+        info.stratum_url = "mine.ocean.xyz".to_string();
+        info.stratum_user = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa".to_string();
+
+        let output = render("192.168.1.42", &info, false);
+
+        assert!(output.ends_with(
+            "\
+● Primary    mine.ocean.xyz:21496 · 1A1zP1eP…DivfNa
+  Dashboard  https://ocean.xyz/stats/1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+"
+        ));
     }
 
     #[test]

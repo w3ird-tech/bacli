@@ -1,3 +1,4 @@
+mod dashboard;
 mod view;
 
 use std::io::IsTerminal;
